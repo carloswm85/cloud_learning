@@ -8,9 +8,10 @@
 
 # GitHub Organization → Azure
 
-Yes—this is the recommended approach when your organization already uses GitHub. GitHub manages source control and deployment triggers, while Azure provides hosting, DNS, TLS, and monitoring.
+Yes—this is the recommended approach when your organization already uses GitHub.
 
-Azure Static Web Apps can connect directly to a GitHub Organization repository. During setup, select the organization, repository, and production branch. Azure then creates a GitHub Actions workflow that deploys changes to the Static Web App.
+- GitHub manages source control and deployment triggers, while Azure provides hosting, DNS, TLS, and monitoring.
+- Azure Static Web Apps can connect directly to a GitHub Organization repository. During setup, select the organization, repository, and production branch. Azure then creates a GitHub Actions workflow that deploys changes to the Static Web App.
 
 [Azure Static Web Apps quickstart](https://learn.microsoft.com/en-us/azure/static-web-apps/get-started-portal?pivots=github&tabs=vanilla-javascript)
 
