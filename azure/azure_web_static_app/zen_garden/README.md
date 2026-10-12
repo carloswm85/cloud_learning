@@ -1,6 +1,14 @@
-# WDD331 - Advanced CSS
+# WDD331: Advanced CSS
 
-## TEAM 14 Information
+## Table of Contents
+
+- [(1) Team 14 Information](#1-team-14-information)
+- [(2) Using Lint](#2-using-lint)
+- [(3) CSS Zen Garden](#3-css-zen-garden)
+
+---
+
+## (1) Team 14 Information
 
 Teacher: Preston Blaylock
 
@@ -14,7 +22,7 @@ Team members:
 
 ---
 
-## USING LINT
+## (2) Using Lint
 
 Brother Blaylock:
 
@@ -28,7 +36,7 @@ Stylelint repo:
 
 Behold, the power of CSS!
 
-# CSS Zen Garden
+## (3) CSS Zen Garden
 
 - School project, for WWD331, year 2020. Brigham Young University, Idaho.
 - Take a look at the result on: <https://carloswm85.github.io/zen-garden/>

@@ -1,10 +1,18 @@
-# Cloud learning
+# Cloud Learning
+
+## Table of Contents
+
+- [(1) Azure Web Services Focus](#1-azure-web-services-focus)
+- [(2) Major Cloud Platforms](#2-major-cloud-platforms)
+- [(3) Repository Direction](#3-repository-direction)
+
+---
 
 This repository is a hands-on learning space for cloud technologies. Its primary focus is **Azure Web Services**: building, deploying, configuring, and operating web applications on Microsoft Azure.
 
 Although Azure is the current and intended learning path, the repository also keeps a concise map of the broader cloud ecosystem. The same web-application concepts—compute, networking, storage, identity, observability, and CI/CD—transfer well between providers.
 
-## Azure Web Services focus
+## (1) Azure Web Services Focus
 
 The learning material will concentrate on Azure services commonly used to deliver web applications:
 
@@ -16,7 +24,9 @@ The learning material will concentrate on Azure services commonly used to delive
 - Azure Front Door (<https://azure.microsoft.com/products/frontdoor>) for global application delivery and security.
 - Microsoft Learn: Azure (<https://learn.microsoft.com/training/azure/>) for guided learning paths and modules.
 
-## Major cloud platforms
+---
+
+## (2) Major Cloud Platforms
 
 | # | Platform | Official web-services entry point |
 | --- | --- | --- |
@@ -27,6 +37,8 @@ The learning material will concentrate on Azure services commonly used to delive
 | 5 | IBM Cloud | <https://www.ibm.com/cloud> |
 | 6 | Alibaba Cloud | <https://www.alibabacloud.com/> |
 
-## Repository direction
+---
+
+## (3) Repository Direction
 
 The repository begins with Azure Web Services and does not currently plan to expand into hands-on material for other cloud providers. The platform links above are included as reference points for comparing terminology and equivalent capabilities when useful.
