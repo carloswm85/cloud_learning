@@ -4,13 +4,15 @@
 
   - [(1) Goal](#1-goal)
   - [(2) Prerequisites](#2-prerequisites)
-  - [(3) Site assessment](#3-site-assessment)
+  - [(3) Site Assessment](#3-site-assessment)
   - [(4) Create the Static Web App](#4-create-the-static-web-app)
-  - [(5) Validate the generated workflow](#5-validate-the-generated-workflow)
-  - [(6) Verify the deployment](#6-verify-the-deployment)
-  - [(7) Diagnose a missing stylesheet](#7-diagnose-a-missing-stylesheet)
-  - [(8) Clean up](#8-clean-up)
-  - [References](#references)
+  - [(5) Validate the Generated Workflow](#5-validate-the-generated-workflow)
+  - [(6) Verify the Deployment](#6-verify-the-deployment)
+  - [(7) Diagnose a Missing Stylesheet](#7-diagnose-a-missing-stylesheet)
+  - [(8) Clean Up](#8-clean-up)
+  - [(9) References](#9-references)
+
+---
 
 ## (1) Goal
 

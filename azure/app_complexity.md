@@ -1,144 +1,274 @@
-# Azure web hosting options by application complexity
+- [Azure Web Hosting Options by Application Complexity](#azure-web-hosting-options-by-application-complexity)
+  - [(1) Azure Hosting Options by Complexity](#1-azure-hosting-options-by-complexity)
+  - [(2) Static Versus Dynamic Hosting](#2-static-versus-dynamic-hosting)
+    - [(2.1) Static Hosting](#21-static-hosting)
+    - [(2.2) Dynamic Hosting](#22-dynamic-hosting)
+  - [(3) Hosting Decision Guide](#3-hosting-decision-guide)
+  - [(4) Free-Tier Considerations](#4-free-tier-considerations)
+  - [(5) Full-Stack ASP.NET Core and Angular/React Example](#5-full-stack-aspnet-core-and-angularreact-example)
+  - [(6) GitHub and Azure Deployment Workflow](#6-github-and-azure-deployment-workflow)
+    - [(6.1) Deployment Steps](#61-deployment-steps)
+  - [(7) Recommendations by Project Type](#7-recommendations-by-project-type)
+  - [(8) Official Azure Documentation and Links](#8-official-azure-documentation-and-links)
+    - [(8.1) Azure Service Documentation](#81-azure-service-documentation)
+    - [(8.2) Pricing and Free-Tier References](#82-pricing-and-free-tier-references)
+    - [(8.3) Azure Management and Deployment Portals](#83-azure-management-and-deployment-portals)
+  - [(9) Final Recommendations](#9-final-recommendations)
 
-Azure provides several ways to deploy websites and web applications, ranging from simple static HTML pages to enterprise applications with APIs, databases, Docker containers, and microservices.
+---
 
-The most important distinction is between applications that require a server to execute code and those that can run entirely in the user's browser.
+# Azure Web Hosting Options by Application Complexity
 
-## (1) Azure hosting options by complexity
+---
 
-| Level | Application type                       | Recommended Azure service         | Free option            |
-| ----- | -------------------------------------- | --------------------------------- | ---------------------- |
-| 1     | Static HTML/CSS/JS website             | Azure Static Web Apps             | Yes                    |
-| 1     | Basic static website or files          | Azure Blob Storage                | Pay-as-you-go          |
-| 2     | React / Angular / Vue SPA              | Azure Static Web Apps             | Yes                    |
-| 3     | SPA with lightweight serverless API    | Static Web Apps + Azure Functions | Yes, within limits     |
-| 4     | ASP.NET Core MVC / Razor Pages         | Azure App Service                 | F1 Free                |
-| 4     | ASP.NET Core Web API                   | Azure App Service                 | F1 Free                |
-| 5     | Full-stack application with SQL Server | App Service + Azure SQL Database  | Partial                |
-| 6     | Dockerized web application / API       | Azure Container Apps              | Consumption free grant |
-| 7     | Multiple containerized services        | Azure Container Apps              | Limited free grant     |
-| 8     | Enterprise microservices / Kubernetes  | Azure Kubernetes Service (AKS)    | Infrastructure costs   |
-| 9     | Fully customized server hosting        | Azure Virtual Machines            | Generally paid         |
+> Azure offers several ways to deploy websites and web applications, ranging from
+> static HTML pages to enterprise applications with APIs, databases, containers,
+> and microservices. The most important distinction is whether the application
+> requires a server to execute code or can run entirely in the browser.
 
-These levels represent increasing architectural and operational complexity, not necessarily increasing application quality.&#x20;
+---
 
-[image](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com&sz=32)
+## (1) Azure Hosting Options by Complexity
 
-Microsoft Learn
+| Level | Application Type                       | Recommended Azure Service         | Free Option            |
+| ----: | -------------------------------------- | --------------------------------- | ---------------------- |
+|     1 | Static HTML/CSS/JavaScript website     | Azure Static Web Apps             | Yes                    |
+|     1 | Basic static website or files          | Azure Blob Storage                | Pay-as-you-go          |
+|     2 | React / Angular / Vue SPA              | Azure Static Web Apps             | Yes                    |
+|     3 | SPA with lightweight serverless API    | Static Web Apps + Azure Functions | Yes, within limits     |
+|     4 | ASP\.NET Core MVC / Razor Pages        | Azure App Service                 | F1 Free                |
+|     4 | ASP\.NET Core Web API                  | Azure App Service                 | F1 Free                |
+|     5 | Full-stack application with SQL Server | App Service + Azure SQL Database  | Partial                |
+|     6 | Dockerized web application / API       | Azure Container Apps              | Consumption free grant |
+|     7 | Multiple containerized services        | Azure Container Apps              | Limited free grant     |
+|     8 | Enterprise microservices / Kubernetes  | Azure Kubernetes Service (AKS)    | Infrastructure costs   |
+|     9 | Fully customized server hosting        | Azure Virtual Machines            | Generally paid         |
 
-+2
+These levels indicate increasing architectural and operational complexity, not
+necessarily increasing application quality.
 
-## (2) Understanding static versus dynamic applications
+---
 
-Static hosting
+## (2) Static Versus Dynamic Hosting
 
-Browser
+### (2.1) Static Hosting
 
-HTML, CSS, JavaScript
+Static hosting delivers prebuilt HTML, CSS, JavaScript, images, and other assets
+without a continuously running application server.
 
-Static files
+```mermaid
+---
+title: "~ Static Website Delivery ~"
+config:
+  theme: dark
+---
 
-Azure Static Web Apps
+flowchart LR
+    Browser[User browser] --> Hosting[Azure Static Web Apps]
+    Hosting --> Assets[HTML, CSS, JavaScript, and assets]
+```
 
-No continuously running application server required.
+### (2.2) Dynamic Hosting
 
-Dynamic hosting
+Dynamic hosting runs server-side code, business logic, and data access. A React
+or Angular SPA can still be statically hosted when it retrieves changing data
+from an API; static hosting describes frontend delivery, not whether the content
+changes.
 
-Browser
+```mermaid
+---
+title: "~ Dynamic Application Delivery ~"
+config:
+  theme: dark
+---
 
-ASP\\.NET Core API
+flowchart LR
+    Browser[User browser] --> App[Azure App Service]
+    App --> Api[ASP.NET Core API]
+    Api --> Database[Azure SQL Database]
+```
 
-SQL Database
+An ASP\.NET Core MVC application that renders HTML on the server generally
+requires App Service or another service capable of running its .NET backend.
 
-Server-side processing, business logic and persistent data.
+---
 
-A React or Angular SPA can be hosted statically even when it displays dynamic information obtained from an API. Static hosting refers to how the frontend is delivered, not whether its content changes.
+## (3) Hosting Decision Guide
 
-Conversely, an ASP\\.NET Core MVC application that renders HTML on the server generally requires App Service or another service capable of running its .NET backend.
+```mermaid
+---
+title: "~ Azure Hosting Selection Guide ~"
+config:
+  theme: dark
+---
 
-## (3) Which Azure service should you choose?
+flowchart TD
+    Start[Choose application type] --> Backend{Needs a backend?}
+    Backend -- No --> Static[Azure Static Web Apps]
+    Backend -- Small serverless API --> Functions[Static Web Apps + Azure Functions]
+    Backend -- ASP.NET Core API or MVC --> AppService[Azure App Service]
+    Backend -- Containerized workload --> ContainerApps[Azure Container Apps]
+    ContainerApps --> Kubernetes{Needs Kubernetes control?}
+    Kubernetes -- Yes --> AKS[Azure Kubernetes Service]
+    Kubernetes -- No --> ContainerApps
+```
 
-Choose your application type
+Azure Static Web Apps is a strong fit for compiled Angular, React, and Vue
+frontends that execute in the browser. Choose Azure App Service when server-side
+rendering or custom server behavior is required.
 
-HTML, CSS and JavaScript website
+---
 
-Angular / React / Vue SPA
+## (4) Free-Tier Considerations
 
-ASP\\.NET Core MVC / Razor Pages
+|   # | Service              | Free-Tier Details                                             | Main Limitation                                        |
+| --: | -------------------- | ------------------------------------------------------------- | ------------------------------------------------------ |
+|   1 | Static Web Apps Free | Static hosting, managed APIs, TLS, and limited custom domains | No SLA; usage and feature limits                       |
+|   2 | App Service F1       | Shared compute for development and testing                    | CPU quotas and restricted features                     |
+|   3 | Blob Storage         | Usage-based billing                                           | No integrated application authentication               |
+|   4 | Azure Functions      | Consumption-based free grant                                  | Execution and resource limits                          |
+|   5 | Container Apps       | Monthly consumption free grant                                | Charges beyond the grant and for dependent resources   |
+|   6 | AKS                  | Free control plane option                                     | Worker nodes and supporting infrastructure incur costs |
 
-ASP\\.NET Core Web API
+For Azure Container Apps Consumption, the monthly grant includes 180,000
+vCPU-seconds, 360,000 GiB-seconds, and 2 million HTTP requests per subscription.
+For Azure SQL Database, the free offer covers up to 10 eligible databases per
+subscription, subject to its published compute and storage limits.
 
-Dockerized application
+---
 
-Microservices architecture
+## (5) Full-Stack ASP\.NET Core and Angular/React Example
 
-Do you need a backend?
+For Angular or React with an ASP\.NET Core 10 Web API and SQL Server, deploy the
+frontend, backend, and database independently.
 
-No backend
+```mermaid
+---
+title: "~ Azure Full-Stack Application ~"
+config:
+  theme: dark
+---
 
-Small serverless API
+flowchart LR
+    Browser[User browser] --> Frontend[Azure Static Web Apps]
+    Frontend --> Api[Azure App Service<br/>ASP.NET Core 10 Web API]
+    Api --> Database[Azure SQL Database]
+```
 
-Dedicated ASP\\.NET Core API
+Advantages include independent frontend and backend deployment, efficient
+delivery of static files, separate backend scaling, and database credentials
+remaining on the backend. With direct browser-to-API requests, configure
+authentication, CORS, HTTPS, and database access controls appropriately.
 
-Recommended hosting
+---
 
-## Azure Static Web Apps
+## (6) GitHub and Azure Deployment Workflow
 
-Ideal for a compiled Angular, React or Vue application that executes in the browser.
+GitHub Actions can automate compilation, testing, and deployment.
 
-Azure App Service if you need server-side rendering or custom server behavior.
+```mermaid
+---
+title: "~ GitHub to Azure Deployment Workflow ~"
+config:
+  theme: dark
+---
 
-Create deployment lab&#x20;
+flowchart LR
+    Developer[Developer] --> Repository[GitHub repository]
+    Repository --> Actions[GitHub Actions]
+    Actions --> Frontend[Deploy frontend to Static Web Apps]
+    Actions --> Api[Deploy API to App Service]
+    Api --> Database[Connect to Azure SQL Database]
+```
 
-## (4) Important free-tier differences
+### (6.1) Deployment Steps
 
-| Service              | Free-tier details                                        | Main limitation                                  |
-| -------------------- | -------------------------------------------------------- | ------------------------------------------------ |
-| Static Web Apps Free | Free static hosting, managed APIs, SSL, 2 custom domains | No SLA; usage and feature limits                 |
-| App Service F1       | Shared compute for development/testing                   | CPU quotas and restricted features               |
-| Blob Storage         | Usage-based billing                                      | No integrated application authentication         |
-| Azure Functions      | Consumption-based free grant                             | Execution and resource limits                    |
-| Container Apps       | Monthly consumption free grant                           | Charges beyond grant and for other resources     |
-| AKS                  | Free control-plane option                                | Worker nodes and other infrastructure cost money |
+1. Create an Azure subscription and resource group.
+2. Create an Azure Static Web App for the Angular or React frontend.
+3. Create an Azure App Service with an appropriate .NET runtime.
+4. Create an Azure SQL Database when persistent relational storage is required.
+5. Configure the API connection string with App Service application settings.
+6. Connect the GitHub repository to Azure.
+7. Configure GitHub Actions to build and deploy the frontend and backend.
+8. Configure API URLs, authentication, and CORS as required.
+9. Test the application through its public HTTPS endpoints.
 
-For Azure Container Apps Consumption, the published monthly free grant includes 180,000 vCPU-seconds, 360,000 GiB-seconds and 2 million requests per subscription.&#x20;
+---
 
-[image](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com&sz=32)
+## (7) Recommendations by Project Type
 
-Microsoft Learn
+|   # | Project                            | Recommended Hosting    | Reason                               |
+| --: | ---------------------------------- | ---------------------- | ------------------------------------ |
+|   1 | Personal portfolio                 | Static Web Apps Free   | Simple deployment                    |
+|   2 | Documentation website              | Static Web Apps Free   | Static content delivery              |
+|   3 | React learning project             | Static Web Apps Free   | No application server required       |
+|   4 | Angular learning project           | Static Web Apps Free   | Supports compiled SPAs               |
+|   5 | ASP\.NET Core MVC test application | App Service F1         | Managed .NET runtime                 |
+|   6 | ASP\.NET Core API test application | App Service F1         | Managed API hosting                  |
+|   7 | Production business application    | App Service + database | Managed backend and persistent data  |
+|   8 | Docker learning project            | Container Apps         | Managed container deployment         |
+|   9 | Microservices project              | Container Apps         | Independent scaling and deployments  |
+|  10 | Advanced Kubernetes application    | AKS                    | Kubernetes orchestration and control |
 
-For Static Web Apps Free, Azure supports three staging environments and a 250 MB maximum application size.&#x20;
+---
 
-[image](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com&sz=32)
+## (8) Official Azure Documentation and Links
 
-Microsoft Learn
+### (8.1) Azure Service Documentation
 
-## (5) Recommended architecture for your .NET and frontend projects
+|   # | Azure Service                      | Official Documentation                                                                                                 |
+| --: | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+|   1 | Azure hosting overview             | [Hosting applications on Azure](https://learn.microsoft.com/azure/developer/intro/hosting-apps-on-azure)               |
+|   2 | Azure Static Web Apps              | [Azure Static Web Apps documentation](https://learn.microsoft.com/azure/static-web-apps/)                              |
+|   3 | Azure Blob Storage static websites | [Static website hosting in Azure Storage](https://learn.microsoft.com/azure/storage/blobs/storage-blob-static-website) |
+|   4 | Azure App Service                  | [Azure App Service documentation](https://learn.microsoft.com/azure/app-service/)                                      |
+|   5 | Azure Functions                    | [Azure Functions documentation](https://learn.microsoft.com/azure/azure-functions/)                                    |
+|   6 | Azure Container Apps               | [Azure Container Apps documentation](https://learn.microsoft.com/azure/container-apps/)                                |
+|   7 | Azure SQL Database                 | [Azure SQL Database documentation](https://learn.microsoft.com/azure/azure-sql/database/)                              |
+|   8 | Azure Kubernetes Service           | [Azure Kubernetes Service documentation](https://learn.microsoft.com/azure/aks/)                                       |
+|   9 | Azure Virtual Machines             | [Azure Virtual Machines documentation](https://learn.microsoft.com/azure/virtual-machines/)                            |
 
-For a project using Angular or React with an ASP.NET Core 10 API and SQL Server, you can separate hosting responsibilities:
+### (8.2) Pricing and Free-Tier References
 
-\#chatgpt-mermaid-\_r_ko\_{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:16px;fill:rgb(237, 237, 237);}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#chatgpt-mermaid-\_r_ko\_ .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#chatgpt-mermaid-\_r_ko\_ .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#chatgpt-mermaid-\_r_ko\_ .error-icon{fill:#a44141;}#chatgpt-mermaid-\_r_ko\_ .error-text{fill:#ddd;stroke:#ddd;}#chatgpt-mermaid-\_r_ko\_ .edge-thickness-normal{stroke-width:1px;}#chatgpt-mermaid-\_r_ko\_ .edge-thickness-thick{stroke-width:3.5px;}#chatgpt-mermaid-\_r_ko\_ .edge-pattern-solid{stroke-dasharray:0;}#chatgpt-mermaid-\_r_ko\_ .edge-thickness-invisible{stroke-width:0;fill:none;}#chatgpt-mermaid-\_r_ko\_ .edge-pattern-dashed{stroke-dasharray:3;}#chatgpt-mermaid-\_r_ko\_ .edge-pattern-dotted{stroke-dasharray:2;}#chatgpt-mermaid-\_r_ko\_ .marker{fill:rgb(175, 175, 175);stroke:rgb(175, 175, 175);}#chatgpt-mermaid-\_r_ko\_ .marker.cross{stroke:rgb(175, 175, 175);}#chatgpt-mermaid-\_r_ko\_ svg{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:16px;}#chatgpt-mermaid-\_r_ko\_ p{margin:0;}#chatgpt-mermaid-\_r_ko\_ .label{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";color:rgb(237, 237, 237);}#chatgpt-mermaid-\_r_ko\_ .cluster-label text{fill:rgb(237, 237, 237);}#chatgpt-mermaid-\_r_ko\_ .cluster-label span{color:rgb(237, 237, 237);}#chatgpt-mermaid-\_r_ko\_ .cluster-label span p{background-color:transparent;}#chatgpt-mermaid-\_r_ko\_ .label text,#chatgpt-mermaid-\_r_ko\_ span{fill:rgb(237, 237, 237);color:rgb(237, 237, 237);}#chatgpt-mermaid-\_r_ko\_ .node rect,#chatgpt-mermaid-\_r_ko\_ .node circle,#chatgpt-mermaid-\_r_ko\_ .node ellipse,#chatgpt-mermaid-\_r_ko\_ .node polygon,#chatgpt-mermaid-\_r_ko\_ .node path{fill:rgb(9, 23, 44);stroke:rgb(31, 78, 148);stroke-width:1px;}#chatgpt-mermaid-\_r_ko\_ .rough-node .label text,#chatgpt-mermaid-\_r_ko\_ .node .label text,#chatgpt-mermaid-\_r_ko\_ .image-shape .label,#chatgpt-mermaid-\_r_ko\_ .icon-shape .label{text-anchor:middle;}#chatgpt-mermaid-\_r_ko\_ .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#chatgpt-mermaid-\_r_ko\_ .rough-node .label,#chatgpt-mermaid-\_r_ko\_ .node .label,#chatgpt-mermaid-\_r_ko\_ .image-shape .label,#chatgpt-mermaid-\_r_ko\_ .icon-shape .label{text-align:center;}#chatgpt-mermaid-\_r_ko\_ .node.clickable{cursor:pointer;}#chatgpt-mermaid-\_r_ko\_ .root .anchor path{fill:rgb(175, 175, 175)!important;stroke-width:0;stroke:rgb(175, 175, 175);}#chatgpt-mermaid-\_r_ko\_ .arrowheadPath{fill:rgb(175, 175, 175);}#chatgpt-mermaid-\_r_ko\_ .edgePath .path{stroke:rgb(175, 175, 175);stroke-width:1px;}#chatgpt-mermaid-\_r_ko\_ .flowchart-link{stroke:rgb(175, 175, 175);fill:none;}#chatgpt-mermaid-\_r_ko\_ .edgeLabel{background-color:rgb(0, 0, 0);text-align:center;}#chatgpt-mermaid-\_r_ko\_ .edgeLabel p{background-color:rgb(0, 0, 0);}#chatgpt-mermaid-\_r_ko\_ .edgeLabel rect{opacity:0.5;background-color:rgb(0, 0, 0);fill:rgb(0, 0, 0);}#chatgpt-mermaid-\_r_ko\_ .labelBkg{background-color:rgba(0, 0, 0, 0.5);}#chatgpt-mermaid-\_r_ko\_ .cluster rect{fill:rgb(48, 48, 48);stroke:rgba(255, 255, 255, 0.15);stroke-width:1px;}#chatgpt-mermaid-\_r_ko\_ .cluster text{fill:rgb(237, 237, 237);}#chatgpt-mermaid-\_r_ko\_ .cluster span{color:rgb(237, 237, 237);}#chatgpt-mermaid-\_r_ko\_ div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:12px;background:rgb(48, 48, 48);border:1px solid rgba(255, 255, 255, 0.25);border-radius:2px;pointer-events:none;z-index:100;}#chatgpt-mermaid-\_r_ko\_ .flowchartTitleText{text-anchor:middle;font-size:18px;fill:rgb(237, 237, 237);}#chatgpt-mermaid-\_r_ko\_ rect.text{fill:none;stroke-width:0;}#chatgpt-mermaid-\_r_ko\_ .icon-shape,#chatgpt-mermaid-\_r_ko\_ .image-shape{background-color:rgb(0, 0, 0);text-align:center;}#chatgpt-mermaid-\_r_ko\_ .icon-shape p,#chatgpt-mermaid-\_r_ko\_ .image-shape p{background-color:rgb(0, 0, 0);padding:2px;}#chatgpt-mermaid-\_r_ko\_ .icon-shape .label rect,#chatgpt-mermaid-\_r_ko\_ .image-shape .label rect{opacity:0.5;background-color:rgb(0, 0, 0);fill:rgb(0, 0, 0);}#chatgpt-mermaid-\_r_ko\_ .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#chatgpt-mermaid-\_r_ko\_ .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#chatgpt-mermaid-\_r_ko\_ .node .neo-node{stroke:rgb(31, 78, 148);}#chatgpt-mermaid-\_r_ko\_ [data-look="neo"].node rect,#chatgpt-mermaid-\_r_ko\_ [data-look="neo"].cluster rect,#chatgpt-mermaid-\_r_ko\_ [data-look="neo"].node polygon{stroke:url(#chatgpt-mermaid-\_r_ko\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_ko\_ [data-look="neo"].swimlane.cluster rect{filter:none;}#chatgpt-mermaid-\_r_ko\_ [data-look="neo"].node path{stroke:url(#chatgpt-mermaid-\_r_ko\_-gradient);stroke-width:1px;}#chatgpt-mermaid-\_r_ko\_ [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_ko\_ [data-look="neo"].node .neo-line path{stroke:rgb(31, 78, 148);filter:none;}#chatgpt-mermaid-\_r_ko\_ [data-look="neo"].node circle{stroke:url(#chatgpt-mermaid-\_r_ko\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_ko\_ [data-look="neo"].node circle .state-start{fill:#000000;}#chatgpt-mermaid-\_r_ko\_ [data-look="neo"].icon-shape .icon{fill:url(#chatgpt-mermaid-\_r_ko\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_ko\_ [data-look="neo"].icon-shape .icon-neo path{stroke:url(#chatgpt-mermaid-\_r_ko\_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-\_r_ko\_ :root{--mermaid-font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";}BrowserAzure Static Web AppsAngular / ReactAzure App ServiceASP.NET Core 10 APIAzure SQL Database\~ Azure full-stack hosting \~
+|   # | Resource                      | Official Link                                                                                       |
+| --: | ----------------------------- | --------------------------------------------------------------------------------------------------- |
+|   1 | Azure pricing calculator      | [Azure pricing calculator](https://azure.microsoft.com/pricing/calculator/)                         |
+|   2 | Azure free services           | [Azure free account](https://azure.microsoft.com/free/)                                             |
+|   3 | Static Web Apps plans         | [Static Web Apps hosting plans](https://learn.microsoft.com/azure/static-web-apps/plans)            |
+|   4 | Static Web Apps quotas        | [Static Web Apps quotas](https://learn.microsoft.com/azure/static-web-apps/quotas)                  |
+|   5 | App Service pricing           | [Azure App Service pricing](https://azure.microsoft.com/pricing/details/app-service/)               |
+|   6 | Container Apps pricing        | [Azure Container Apps pricing](https://azure.microsoft.com/pricing/details/container-apps/)         |
+|   7 | Azure SQL Database free offer | [Azure SQL Database free offer](https://learn.microsoft.com/azure/azure-sql/database/free-offer)    |
+|   8 | AKS pricing                   | [Azure Kubernetes Service pricing](https://azure.microsoft.com/pricing/details/kubernetes-service/) |
 
-The diagram assumes that the frontend calls the API directly. You would configure CORS, authentication, HTTPS and appropriate network access. Static Web Apps Standard also supports linking an App Service backend, which can simplify API routing.&#x20;
+### (8.3) Azure Management and Deployment Portals
 
-[image](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com&sz=32)
+|   # | Portal                   | URL                                               | Purpose                               |
+| --: | ------------------------ | ------------------------------------------------- | ------------------------------------- |
+|   1 | Azure portal             | <https://portal.azure.com>                        | Create and manage Azure resources     |
+|   2 | Azure DevOps             | <https://dev.azure.com>                           | Repositories, pipelines, and projects |
+|   3 | GitHub                   | <https://github.com>                              | Source code repositories              |
+|   4 | GitHub Actions           | <https://github.com/features/actions>             | Automated builds and deployments      |
+|   5 | Microsoft Learn          | <https://learn.microsoft.com>                     | Azure documentation                   |
+|   6 | Azure pricing calculator | <https://azure.microsoft.com/pricing/calculator/> | Estimate deployment costs             |
 
-Microsoft Learn
+---
 
-A separate consideration is Next.js. Static HTML exports fit Static Web Apps; server-side rendering requires a compatible runtime. Azure also documents hybrid Next.js support in preview.&#x20;
+## (9) Final Recommendations
 
-[image](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com&sz=32)
+|   # | Requirement                               | Recommended Service              |
+| --: | ----------------------------------------- | -------------------------------- |
+|   1 | Simplest possible static hosting          | Azure Static Web Apps            |
+|   2 | Free React or Angular hosting             | Azure Static Web Apps Free       |
+|   3 | Simple ASP\.NET Core application          | Azure App Service                |
+|   4 | ASP\.NET Core application with SQL Server | App Service + Azure SQL Database |
+|   5 | Serverless backend                        | Azure Functions                  |
+|   6 | Docker-based deployment                   | Azure Container Apps             |
+|   7 | Containerized microservices               | Azure Container Apps             |
+|   8 | Advanced Kubernetes management            | AKS                              |
+|   9 | Full control over the operating system    | Azure Virtual Machines           |
 
-Microsoft Learn
-
-My suggested starting points for your projects:
-
-- Personal portfolio or documentation: Static Web Apps Free.
-- React or Angular learning project: Static Web Apps Free.
-- ASP.NET Core MVC development/testing: App Service F1.
-- Full-stack production system: Static Web Apps + App Service + SQL database.
-- Docker and distributed application experiments: Container Apps.
-
-You do not need to move to Docker, Kubernetes or virtual machines merely because an application grows. Start with the simplest hosting service that satisfies its runtime, availability, security and scaling requirements.
-
-Microsoft's general hosting decision guide is available at .
+For a conventional SPA, MVC, Web API, or full-stack learning path, learn Static
+Web Apps, App Service, and Azure SQL Database first. Move to Container Apps for
+Docker-based projects, and introduce AKS once Kubernetes-specific requirements
+justify the additional operational complexity.
