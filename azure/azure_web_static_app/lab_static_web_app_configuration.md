@@ -2,6 +2,8 @@
 
 ## Table of Contents
 
+- [Azure Static Web Apps Configuration Lab](#azure-static-web-apps-configuration-lab)
+  - [Table of Contents](#table-of-contents)
   - [(1) Goal](#1-goal)
   - [(2) Prerequisites](#2-prerequisites)
   - [(3) Site Assessment](#3-site-assessment)
@@ -64,11 +66,11 @@ The application is a plain static site. `index.html`, `style.css`, and `assets/`
 1. In the Azure portal, select **Create a resource**, then search for **Static Web Apps**.
 2. Select **Create** and complete the **Basics** tab.
 
-|   # | Field             | Recommended value                                             | Situation                                    |
+|   # | Field (levels)    | Recommended value                                             | Situation                                    |
 | --: | ----------------- | ------------------------------------------------------------- | -------------------------------------------- |
 |   1 | Subscription      | Your intended subscription                                    | ✅ Resource owner                            |
-|   2 | Resource group    | `rg-zen-garden` or an existing learning group                 | ✅ Logical grouping                          |
-|   3 | Name              | A globally unique lowercase name, such as `zen-garden-carlos` | ✅ Required by Azure                         |
+|   2 | Resource group    | `rg-zen-garden-dev` or an existing learning group             | ✅ Logical grouping                          |
+|   3 | Name              | A globally unique name, such as `stapp-zen-garden-dev-001`    | ✅ Required by Azure                         |
 |   4 | Plan type         | `Free`                                                        | ✅ Suitable for this lab                     |
 |   5 | Deployment source | `GitHub`                                                      | ✅ Enables CI/CD                             |
 |   6 | Organization      | The organization that owns the repository                     | ✅ Must authorize Azure access if restricted |
@@ -80,6 +82,8 @@ The application is a plain static site. `index.html`, `style.css`, and `assets/`
 5. In **Advanced**, leave authentication and managed API features disabled. Keep the default region unless you need a specific region for a future API or preview environments.
 6. Optionally add the tags `project=zen-garden`, `environment=production`, and `owner=carlos`.
 7. Select **Review + create**, then **Create**.
+
+For reusable Azure naming guidance, see [Azure recommended names](../azure_recommended_names.md).
 
 ---
 

@@ -256,17 +256,17 @@ flowchart LR
 
 ## (9) Final Recommendations
 
-|   # | Requirement                               | Recommended Service              |
-| --: | ----------------------------------------- | -------------------------------- |
-|   1 | Simplest possible static hosting          | Azure Static Web Apps            |
-|   2 | Free React or Angular hosting             | Azure Static Web Apps Free       |
-|   3 | Simple ASP\.NET Core application          | Azure App Service                |
-|   4 | ASP\.NET Core application with SQL Server | App Service + Azure SQL Database |
-|   5 | Serverless backend                        | Azure Functions                  |
-|   6 | Docker-based deployment                   | Azure Container Apps             |
-|   7 | Containerized microservices               | Azure Container Apps             |
-|   8 | Advanced Kubernetes management            | AKS                              |
-|   9 | Full control over the operating system    | Azure Virtual Machines           |
+|   # | Requirement                               | Recommended Service              | Tech Stack Example                                  |
+| --: | ----------------------------------------- | -------------------------------- | --------------------------------------------------- |
+|   1 | Simplest possible static hosting          | Azure Static Web Apps            | HTML, CSS, and JavaScript                           |
+|   2 | Free React or Angular hosting             | Azure Static Web Apps Free       | React or Angular with TypeScript                    |
+|   3 | Simple ASP\.NET Core application          | Azure App Service                | ASP\.NET Core MVC or Razor Pages                    |
+|   4 | ASP\.NET Core application with SQL Server | App Service + Azure SQL Database | Angular or React, ASP\.NET Core Web API, SQL Server |
+|   5 | Serverless backend                        | Azure Functions                  | C# or TypeScript Azure Functions                    |
+|   6 | Docker-based deployment                   | Azure Container Apps             | Docker with ASP\.NET Core or Node.js                |
+|   7 | Containerized microservices               | Azure Container Apps             | Docker, .NET microservices, and Dapr                |
+|   8 | Advanced Kubernetes management            | AKS                              | Kubernetes, Helm, and .NET microservices            |
+|   9 | Full control over the operating system    | Azure Virtual Machines           | Linux or Windows Server, Nginx or IIS, ASP\.NET Core |
 
 For a conventional SPA, MVC, Web API, or full-stack learning path, learn Static
 Web Apps, App Service, and Azure SQL Database first. Move to Container Apps for
